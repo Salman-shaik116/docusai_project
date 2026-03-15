@@ -1,0 +1,1000 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Test Interpretation - DocusAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #FFFFFF;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --primary-blue: #2563EB;
+            --primary-blue-hover: #1D4ED8;
+            --primary-blue-light: #EFF6FF;
+            --card-bg: #FFFFFF;
+            --card-hover: #FFFFFF;
+            --section-alt-bg: #F8FAFC;
+            --footer-bg: #0F172A;
+            --footer-text: #F8FAFC;
+            --footer-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --border-color-hover: #CBD5E1;
+            --header-bg: rgba(255, 255, 255, 0.85);
+            --white-bg: #FFFFFF;
+            --box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --box-shadow-hover: 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 10px 10px -5px rgba(15, 23, 42, 0.05);
+            --radius-main: 12px;
+            --radius-btn: 6px;
+            --success-bg: #ECFDF5;
+            --success-text: #047857;
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #0B1120;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --primary-blue: #3B82F6;
+            --primary-blue-hover: #60A5FA;
+            --primary-blue-light: rgba(59, 130, 246, 0.15);
+            --card-bg: #1E293B;
+            --card-hover: #1E293B;
+            --section-alt-bg: #0F172A;
+            --footer-bg: #0B1120;
+            --footer-text: #F8FAFC;
+            --footer-muted: #64748B;
+            --border-color: #334155;
+            --border-color-hover: #475569;
+            --header-bg: rgba(11, 17, 32, 0.85);
+            --white-bg: #1E293B;
+            --box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+            --box-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.25);
+            --success-bg: rgba(16, 185, 129, 0.12);
+            --success-text: #6EE7B7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            letter-spacing: -0.01em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            background: var(--header-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo a {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo a::before {
+            content: "";
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            background: var(--primary-blue);
+            display: inline-block;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link,
+        .dropdown-trigger {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover,
+        .dropdown-trigger:hover {
+            color: var(--text-main);
+        }
+
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-trigger {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            cursor: pointer;
+            padding: 0.5rem 0;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            min-width: 220px;
+            padding: 0.5rem;
+            background: var(--white-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-main);
+            box-shadow: var(--box-shadow-hover);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .dropdown-container:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-btn);
+            color: var(--text-main);
+            font-size: 0.92rem;
+            font-weight: 500;
+        }
+
+        .dropdown-item:hover {
+            background: var(--section-alt-bg);
+            color: var(--primary-blue);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.5rem;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--card-hover);
+            color: var(--text-main);
+            border-color: var(--border-color-hover);
+        }
+
+        .theme-toggle svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.7rem 1.35rem;
+            border-radius: var(--radius-btn);
+            background: var(--primary-blue);
+            color: #FFFFFF;
+            border: 1px solid transparent;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .cta-button:hover {
+            background: var(--primary-blue-hover);
+        }
+
+        .cta-outline {
+            background: transparent;
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        .cta-outline:hover {
+            background: var(--card-hover);
+            border-color: var(--border-color-hover);
+        }
+
+        .hero {
+            padding: 5.5rem 0 4rem;
+            background:
+                radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 30%),
+                linear-gradient(180deg, var(--section-alt-bg) 0%, var(--bg-main) 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.35rem 0.8rem;
+            background: var(--primary-blue-light);
+            color: var(--primary-blue);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 6vw, 4.4rem);
+            line-height: 1.05;
+            font-weight: 800;
+            margin-bottom: 1.15rem;
+        }
+
+        .hero p {
+            max-width: 660px;
+            font-size: 1.06rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            max-width: 760px;
+        }
+
+        .metric {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-main);
+            padding: 1rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .metric strong {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric span {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        .upload-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .panel-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .status-chip {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid rgba(16, 185, 129, 0.18);
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .dropzone {
+            border: 1.5px dashed var(--border-color);
+            border-radius: 18px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            background: var(--section-alt-bg);
+            margin-bottom: 1rem;
+        }
+
+        .dropzone-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: var(--primary-blue-light);
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        .dropzone h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .dropzone p {
+            color: var(--text-muted);
+            font-size: 0.94rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .format-list {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .format-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1rem;
+            border-radius: 14px;
+            background: var(--section-alt-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .format-row strong {
+            display: block;
+            font-size: 0.92rem;
+        }
+
+        .format-row span {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+        }
+
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-alt {
+            background: var(--section-alt-bg);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-heading {
+            max-width: 760px;
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+
+        .section-heading h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.9rem;
+        }
+
+        .section-heading p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .workflow-grid,
+        .feature-grid,
+        .lab-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .workflow-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .feature-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .lab-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .info-card,
+        .feature-card,
+        .lab-card,
+        .cta-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-main);
+            box-shadow: var(--box-shadow);
+        }
+
+        .info-card,
+        .feature-card,
+        .lab-card {
+            padding: 2rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        .info-card:hover,
+        .feature-card:hover,
+        .lab-card:hover,
+        .cta-panel:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--box-shadow-hover);
+            border-color: var(--border-color-hover);
+        }
+
+        .step-box,
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-blue-light);
+            color: var(--primary-blue);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+
+        .info-card h3,
+        .feature-card h3,
+        .lab-card h3 {
+            font-size: 1.18rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .info-card p,
+        .feature-card p,
+        .lab-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-main);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+
+        .stat-card strong {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.35rem;
+        }
+
+        .stat-card span {
+            color: var(--text-muted);
+            font-size: 0.94rem;
+        }
+
+        .cta-panel {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        .cta-panel h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.7rem;
+        }
+
+        .cta-panel p {
+            color: var(--text-muted);
+            max-width: 720px;
+        }
+
+        .cta-panel-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        footer {
+            background: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 5rem 0 3rem;
+            border-top: 1px solid #1E293B;
+        }
+
+        .footer-cta {
+            text-align: center;
+            margin-bottom: 5rem;
+            padding-bottom: 4rem;
+            border-bottom: 1px solid #1E293B;
+        }
+
+        .footer-cta h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+        }
+
+        .footer-cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-footer-outline {
+            background: transparent;
+            color: #FFFFFF;
+            border: 1px solid #475569;
+        }
+
+        .cta-footer-outline:hover {
+            background: #1E293B;
+            border-color: #64748B;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            color: var(--footer-muted);
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--footer-muted);
+        }
+
+        .footer-links a:hover {
+            color: #FFFFFF;
+        }
+
+        @media (max-width: 1080px) {
+            .hero-grid,
+            .workflow-grid,
+            .feature-grid,
+            .lab-grid,
+            .stats-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-panel {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .hero-metrics,
+            .stats-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .section {
+                padding: 4rem 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="{% url 'website:index' %}">DocusAI</a>
+                </div>
+
+                <div class="nav-links">
+                    <div class="dropdown-container">
+                        <div class="dropdown-trigger">
+                            Solutions
+                            <svg width="12" height="7" viewBox="0 0 12 7" fill="none">
+                                <path d="M1 1.5L6 5.5L11 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="{% url 'website:ai_doctor' %}" class="dropdown-item">AI Doctor</a>
+                            <a href="{% url 'website:lab_test' %}" class="dropdown-item">Lab Test Interpretation</a>
+                            <a href="{% url 'website:second_opinion' %}" class="dropdown-item">Second Opinion</a>
+                        </div>
+                    </div>
+
+                    <div class="dropdown-container">
+                        <div class="dropdown-trigger">
+                            Resources
+                            <svg width="12" height="7" viewBox="0 0 12 7" fill="none">
+                                <path d="M1 1.5L6 5.5L11 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="{% url 'website:blog' %}" class="dropdown-item">Blog</a>
+                            <a href="{% url 'website:glossary' %}" class="dropdown-item">Glossary</a>
+                            <a href="{% url 'website:knowledge_base' %}" class="dropdown-item">Knowledge Base</a>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'website:pricing' %}" class="nav-link">Pricing</a>
+                    <a href="#workflow" class="nav-link">How It Works</a>
+                </div>
+
+                <div class="header-actions">
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Dark Mode">
+                        <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        </svg>
+                    </button>
+                    <a href="{% url 'website:signin' %}" class="nav-link" style="color: var(--text-main); font-weight: 600;">Sign in</a>
+                    <a href="{% url 'website:signup' %}" class="cta-button">Get started</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div>
+                        <span class="hero-badge">Structured interpretation for modern lab workflows</span>
+                        <h1>Understand lab results with faster, clearer clinical context.</h1>
+                        <p>DocusAI turns uploaded lab reports into readable summaries, biomarker insights, and practical next steps so patients can move from raw numbers to informed decisions.</p>
+                        <div class="hero-actions">
+                            <a href="{% url 'website:signup' %}" class="cta-button">Upload Lab Report</a>
+                            <a href="#features" class="cta-button cta-outline">Explore Analysis</a>
+                        </div>
+                        <div class="hero-metrics">
+                            <div class="metric">
+                                <strong>Multi-format</strong>
+                                <span>Upload PDFs, screenshots, photos, or structured lab exports</span>
+                            </div>
+                            <div class="metric">
+                                <strong>Actionable</strong>
+                                <span>Translate abnormal values into readable clinical meaning</span>
+                            </div>
+                            <div class="metric">
+                                <strong>Private</strong>
+                                <span>Protected workflows designed around healthcare trust</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="upload-panel">
+                        <div class="panel-top">
+                            <div class="panel-title">Lab Upload Workspace</div>
+                            <div class="status-chip">Secure Review</div>
+                        </div>
+
+                        <div class="dropzone">
+                            <div class="dropzone-icon">UP</div>
+                            <h3>Upload your lab files</h3>
+                            <p>Drag in reports or choose files to start structured AI interpretation.</p>
+                            <a href="{% url 'website:signup' %}" class="cta-button">Choose Files</a>
+                        </div>
+
+                        <div class="format-list">
+                            <div class="format-row">
+                                <div>
+                                    <strong>Accepted formats</strong>
+                                    <span>PDF, JPG, PNG, screenshots, mobile camera captures</span>
+                                </div>
+                            </div>
+                            <div class="format-row">
+                                <div>
+                                    <strong>Output delivered</strong>
+                                    <span>Biomarker summary, flagged values, and guided follow-up context</span>
+                                </div>
+                            </div>
+                            <div class="format-row">
+                                <div>
+                                    <strong>Best used with</strong>
+                                    <span>AI Doctor for discussion and second opinion for deeper review</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="workflow">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>How lab interpretation works</h2>
+                    <p>A simple, guided workflow that turns complex medical reports into readable, structured insight.</p>
+                </div>
+
+                <div class="workflow-grid">
+                    <article class="info-card">
+                        <div class="step-box">01</div>
+                        <h3>Upload your report</h3>
+                        <p>Add a blood panel, urine report, scan summary, or other supported test document from any device.</p>
+                    </article>
+                    <article class="info-card">
+                        <div class="step-box">02</div>
+                        <h3>Review flagged biomarkers</h3>
+                        <p>DocusAI organizes results, highlights notable values, and explains the role of each marker in plain language.</p>
+                    </article>
+                    <article class="info-card">
+                        <div class="step-box">03</div>
+                        <h3>Choose the next step</h3>
+                        <p>Continue into AI Doctor for questions or escalate to deeper medical review when your case needs more context.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-alt">
+            <div class="container">
+                <div class="stats-strip">
+                    <div class="stat-card">
+                        <strong>100K+</strong>
+                        <span>Blood test reports processed</span>
+                    </div>
+                    <div class="stat-card">
+                        <strong>30K+</strong>
+                        <span>Urine and routine screening reviews</span>
+                    </div>
+                    <div class="stat-card">
+                        <strong>50K+</strong>
+                        <span>Other diagnostic files analyzed</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="features">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>Professional lab analysis features</h2>
+                    <p>Built to make report interpretation clearer, more useful, and easier to act on.</p>
+                </div>
+
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <div class="icon-box">BM</div>
+                        <h3>Biomarker-level interpretation</h3>
+                        <p>See what each marker means, why it matters, and when an abnormal range may deserve closer review.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="icon-box">RP</div>
+                        <h3>Structured report summaries</h3>
+                        <p>Turn dense lab documents into organized findings, key concerns, and readable explanation blocks.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="icon-box">AI</div>
+                        <h3>Connected clinical discussion</h3>
+                        <p>Bring report findings directly into AI Doctor so you can ask follow-up questions with relevant context.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-alt" id="labs">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>Supported test categories</h2>
+                    <p>DocusAI can support a wide range of diagnostic report types commonly shared by patients and labs.</p>
+                </div>
+
+                <div class="lab-grid">
+                    <article class="lab-card">
+                        <div class="icon-box">BL</div>
+                        <h3>Blood Tests</h3>
+                        <p>Common panels, organ function markers, immune indicators, and routine preventive screening results.</p>
+                    </article>
+                    <article class="lab-card">
+                        <div class="icon-box">UR</div>
+                        <h3>Urine Tests</h3>
+                        <p>Interpret urinary findings related to kidney function, infections, hydration, and metabolic screening.</p>
+                    </article>
+                    <article class="lab-card">
+                        <div class="icon-box">SW</div>
+                        <h3>Swab Tests</h3>
+                        <p>Use summarized interpretation to better understand infection-related reports and follow-up recommendations.</p>
+                    </article>
+                    <article class="lab-card">
+                        <div class="icon-box">ST</div>
+                        <h3>Stool Tests</h3>
+                        <p>Review digestive, infectious, and gut-related findings with clearer explanations and support context.</p>
+                    </article>
+                    <article class="lab-card">
+                        <div class="icon-box">PS</div>
+                        <h3>Pap Smear</h3>
+                        <p>Understand screening outcomes and terminology before follow-up with a clinician or specialist.</p>
+                    </article>
+                    <article class="lab-card">
+                        <div class="icon-box">SA</div>
+                        <h3>Semen Analysis</h3>
+                        <p>Organize fertility-related report details into a clearer, easier-to-discuss interpretation summary.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="cta-panel">
+                    <div>
+                        <h2>Start with your lab file, then continue with guided care tools</h2>
+                        <p>Upload a report for interpretation, discuss the results through AI Doctor, and move into second opinion workflows when more specialized review is needed.</p>
+                    </div>
+                    <div class="cta-panel-actions">
+                        <a href="{% url 'website:signup' %}" class="cta-button">Upload Lab Tests</a>
+                        <a href="{% url 'website:ai_doctor' %}" class="cta-button cta-outline">Discuss Results</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-cta">
+                <h2>Ready to interpret your next lab report?</h2>
+                <div class="footer-cta-buttons">
+                    <a href="{% url 'website:signup' %}" class="cta-button">Start Free Trial</a>
+                    <a href="{% url 'website:knowledge_base' %}" class="cta-button cta-footer-outline">Read Help Guides</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>&copy; 2025 DocusAI Inc. All rights reserved.</div>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Security</a>
+                    <a href="#">API Docs</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const themeToggleBtn = document.getElementById("theme-toggle");
+        const themeIcon = document.getElementById("theme-icon");
+        const htmlElement = document.documentElement;
+
+        const moonPath = "M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z";
+        const sunPath = "M12 2v2m0 16v2m10-10h-2M4 12H2m15.364 7.364l-1.414-1.414M6.343 6.343L4.929 4.929m12.728 0l-1.414 1.414M6.343 17.657l-1.414 1.414M12 17a5 5 0 100-10 5 5 0 000 10z";
+
+        function updateIcon(isDark) {
+            themeIcon.innerHTML = `<path d="${isDark ? sunPath : moonPath}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="${isDark ? "none" : "currentColor"}"/>`;
+        }
+
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+            htmlElement.setAttribute("data-theme", "dark");
+            updateIcon(true);
+        } else {
+            updateIcon(false);
+        }
+
+        themeToggleBtn.addEventListener("click", () => {
+            if (htmlElement.getAttribute("data-theme") === "dark") {
+                htmlElement.removeAttribute("data-theme");
+                localStorage.setItem("theme", "light");
+                updateIcon(false);
+            } else {
+                htmlElement.setAttribute("data-theme", "dark");
+                localStorage.setItem("theme", "dark");
+                updateIcon(true);
+            }
+        });
+    </script>
+</body>
+</html>
